@@ -1,0 +1,20 @@
+---
+title: api
+layout: none
+permalink: /api.json
+---
+
+{ "id": "{{ site.repo }}",
+  "links": {
+    "self": "{{ site.url }}{{ site.baseurl }}{{ page.url }}",
+    "url": "https://www.github.com/{{ site.repo }}"
+  },
+
+  "data": [{% assign grouped = site.sty | group_by: 'category' %}{% for group in grouped %}{% assign items = group.items | sort: 'order' %}{% for item in items %}{% unless item.hidden == "true" %}{
+                "name": "{{ item.id | remove_first:'/' | escape }}",
+                "id": "{{ site.repo }}:{{ item.id | remove_first:'/' | escape }}",
+                "sty": "{{ site.url }}{{ site.baseurl }}/sty/{{ item.sty | escape }}",
+                "sty_raw": "https://raw.githubusercontent.com/{{ site.repo }}/{{ item.branch }}/sty/{{ item.sty | escape }}",
+                "sty_url": "https://raw.githubusercontent.com/{{ site.repo }}/<VERSION>/sty/{{ item.sty | escape }}",
+                "group": "{{ group.name | escape }}"
+           }{% if forloop.last %}{% else %},{% endif %}{% endunless %}{% endfor %}{% endfor %}]}
